@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Thoughtful everyday essentials from NOVA SUPPLY.">
+  <title>NOVA SUPPLY — Everyday, elevated.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="announcement">INTRODUCING NOVA — THOUGHTFUL FINDS FOR EVERYDAY LIFE</div>
+  <header class="site-header">
+    <a class="wordmark" href="#" aria-label="NOVA SUPPLY home">NOVA<span>SUPPLY</span></a>
+    <nav aria-label="Main navigation">
+      <a href="#shop">Shop</a>
+      <a href="#story">Our approach</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <button class="cart-button" id="cart-toggle" aria-label="Open shopping cart">Bag <span id="cart-count">0</span></button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">THE EVERYDAY EDIT · VOL. 01</p>
+        <h1>Everyday,<br><em>elevated.</em></h1>
+        <p class="hero-description">Useful objects. Considered details. A little more intention in the things you use every day.</p>
+        <a class="button button-dark" href="#shop">Explore the collection <span aria-hidden="true">↗</span></a>
+        <p class="hero-note"><span class="dot"></span> A curated first collection</p>
+      </div>
+      <div class="hero-art" role="img" aria-label="Abstract neutral shapes in a warm, modern studio">
+        <div class="sun"></div><div class="arch arch-back"></div><div class="arch arch-front"></div>
+        <div class="orb"></div><span class="art-caption">OBJECTS FOR BETTER EVERYDAYS</span>
+      </div>
+    </section>
+
+    <section class="collection section-wrap" id="shop">
+      <div class="section-heading">
+        <div><p class="eyebrow">THE FIRST EDIT</p><h2>Small things.<br><em>Better considered.</em></h2></div>
+        <p>Start with the essentials. We’re building a collection around practical design and everyday usefulness.</p>
+      </div>
+      <div class="product-grid" id="product-grid"></div>
+      <p class="demo-note">Demo store: products and prices are examples. No real orders or payments are taken.</p>
+    </section>
+
+    <section class="manifesto" id="story">
+      <p class="eyebrow">OUR APPROACH</p>
+      <h2>Less noise.<br><em>More thoughtful choices.</em></h2>
+      <p>We believe the things you reach for every day should earn their place. NOVA is a concept store focused on useful details, simple design and considered choices.</p>
+    </section>
+
+    <section class="faq section-wrap" id="faq">
+      <p class="eyebrow">GOOD TO KNOW</p><h2>Before you shop.</h2>
+      <details><summary>When will my order arrive?</summary><p>Delivery estimates will be shown here once a real supplier and shipping method have been confirmed.</p></details>
+      <details><summary>Can I return an item?</summary><p>A clear returns policy will be published before the store accepts real orders.</p></details>
+      <details><summary>How can I contact you?</summary><p>Add a monitored business email address here before launching publicly.</p></details>
+    </section>
+  </main>
+
+  <footer><a class="wordmark" href="#">NOVA<span>SUPPLY</span></a><p>Considered essentials for everyday life.</p><small>© <span id="year"></span> NOVA SUPPLY · Demo storefront</small></footer>
+
+  <div class="cart-backdrop" id="cart-backdrop" hidden></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="Shopping cart" aria-hidden="true">
+    <div class="cart-header"><h2>Your bag <span id="drawer-count">(0)</span></h2><button id="cart-close" class="icon-button" aria-label="Close cart">✕</button></div>
+    <div id="cart-items" class="cart-items"><p class="empty-cart">Your bag is waiting for something good.</p></div>
+    <div class="cart-bottom"><div class="subtotal"><span>Subtotal</span><strong id="cart-subtotal">$0.00</strong></div><p>Shipping and taxes are calculated at checkout.</p><button class="button button-dark checkout-button" id="checkout-button">Checkout (demo)</button><small>This demo does not collect payment details or create orders.</small></div>
+  </aside>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
