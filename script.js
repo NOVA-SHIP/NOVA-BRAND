@@ -23,9 +23,7 @@ const products = [
     price: 24.00,
     tag: "DAILY ESSENTIAL",
     image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop"
-  }
-];
-
+  },
   {
     id: "nova-tee",
     name: "NOVA Mountain Tee",
@@ -34,6 +32,7 @@ const products = [
     tag: "NOVA ORIGINAL",
     image: "photos/novafront.png"
   }
+];
 
 const cart = new Map();
 const $ = (selector) => document.querySelector(selector);
