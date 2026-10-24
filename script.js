@@ -30,7 +30,7 @@ const products = [
     description: "An oversized streetwear essential",
     price: 64.50,
     tag: "NOVA ORIGINAL",
-   image: "photos/novafront.png.png"
+image: "https://nova-ship.github.io/NOVA-BRAND/photos/novafront.png.png"
   }
 ];
 
