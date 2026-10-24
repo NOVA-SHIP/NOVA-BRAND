@@ -26,6 +26,15 @@ const products = [
   }
 ];
 
+  {
+    id: "nova-tee",
+    name: "NOVA Mountain Tee",
+    description: "An oversized streetwear essential",
+    price: 64.50,
+    tag: "NOVA ORIGINAL",
+    image: "photos/novafront.png"
+  }
+
 const cart = new Map();
 const $ = (selector) => document.querySelector(selector);
 const money = (amount) => new Intl.NumberFormat("en-AU", {
