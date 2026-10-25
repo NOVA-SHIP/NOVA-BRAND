@@ -56,7 +56,8 @@ function renderProducts() {
           src="${product.image}"
           alt="${product.name} - front"
           loading="lazy"
-          data-product-image="${product.id}">
+         data-product-image="${product.id}"
+data-preview-open="${product.id}">
 
         ${product.backImage ? `
           <div class="photo-switch">
