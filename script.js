@@ -31,7 +31,7 @@ const products = [
     price: 64.50,
     tag: "NOVA ORIGINAL",
     image: "https://nova-ship.github.io/NOVA-BRAND/photos/novafront.png.png",
-    backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/novaback.png"
+   backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/novaback.png.png"
   }
 ];
 
