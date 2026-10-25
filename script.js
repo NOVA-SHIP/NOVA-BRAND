@@ -44,7 +44,43 @@ const money = (amount) => new Intl.NumberFormat("en-AU", {
   currency: "AUD"
 }).format(amount);
 
+
 function renderProducts() {
+  $("#product-grid").innerHTML = products.map(product => `
+    <article class="product-card">
+      <div class="product-visual">
+        <span class="product-tag">${product.tag}</span>
+        <img class="product-photo"
+          src="${product.image}"
+          alt="${product.name} - front"
+          loading="lazy"
+          data-product-image="${product.id}">
+        ${product.backImage ? `
+          <div class="photo-switch">
+            <button type="button" data-view="front"
+              data-product="${product.id}" aria-pressed="true">
+              Front
+            </button>
+            <button type="button" data-view="back"
+              data-product="${product.id}" aria-pressed="false">
+              Back
+            </button>
+          </div>
+        ` : ""}
+        <button class="quick-add" data-add="${product.id}"
+          aria-label="Add ${product.name} to bag">+</button>
+      </div>
+      <div class="product-info">
+        <div>
+          <h3>${product.name}</h3>
+          <p>${product.description}</p>
+        </div>
+        <span class="price">${money(product.price)}</span>
+      </div>
+    </article>
+  `).join("");
+}
+ {
   $("#product-grid").innerHTML = products.map(product => `
     <article class="product-card">
       <div class="product-visual">
@@ -148,6 +184,31 @@ function showToast(message) {
 }
 
 document.addEventListener("click", event => {
+    const viewButton = event.target.closest("[data-view]");
+  if (viewButton) {
+    const product = products.find(
+      item => item.id === viewButton.dataset.product
+    );
+
+    if (product) {
+      const showBack = viewButton.dataset.view === "back";
+      const image = document.querySelector(
+        `[data-product-image="${product.id}"]`
+      );
+
+      image.src = showBack ? product.backImage : product.image;
+      image.alt = `${product.name} - ${showBack ? "back" : "front"}`;
+
+      document.querySelectorAll(
+        `[data-product="${product.id}"][data-view]`
+      ).forEach(button => {
+        button.setAttribute(
+          "aria-pressed",
+          String(button === viewButton)
+        );
+      });
+    }
+  }
   const add = event.target.closest("[data-add]");
   if (add) addToCart(add.dataset.add);
 
