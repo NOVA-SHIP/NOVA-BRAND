@@ -1,5 +1,4 @@
 
-
 const products = [
   {
     id: "daily-bottle",
@@ -34,7 +33,27 @@ const products = [
     tag: "NOVA ORIGINAL",
     image: "https://nova-ship.github.io/NOVA-BRAND/photos/novafront.png.png",
     backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/novaback.png.png"
+  },
+  {
+    id: "nova-earthwide-white",
+    name: "NOVA EARTHWIDE — White",
+    description: "Relaxed-fit streetwear pants",
+    price: 64.50,
+    tag: "NOVA ORIGINAL",
+    image: "https://nova-ship.github.io/NOVA-BRAND/photos/whitepantsfront.png",
+    backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/whitepantsback.png"
+  },
+  {
+    id: "nova-earthwide-black",
+    name: "NOVA EARTHWIDE — Black",
+    description: "Relaxed-fit streetwear pants",
+    price: 64.50,
+    tag: "NOVA ORIGINAL",
+    image: "https://nova-ship.github.io/NOVA-BRAND/photos/blackpantsfront.png",
+    backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/blackpantsback.png"
   }
+];
+
 
 ];
 
