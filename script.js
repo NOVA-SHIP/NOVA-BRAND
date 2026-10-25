@@ -1,4 +1,5 @@
 
+
 const products = [
   {
     id: "daily-bottle",
@@ -17,8 +18,6 @@ const products = [
     image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800&auto=format&fit=crop"
   },
   {
-    
-  {
     id: "nova-hoodie",
     name: "NOVA Unisex Hoodie",
     description: "A premium everyday streetwear essential",
@@ -27,15 +26,16 @@ const products = [
     image: "https://nova-ship.github.io/NOVA-BRAND/photos/fronthoodie.png",
     backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/backhoodie.png"
   },
-  { 
+  {
     id: "nova-tee",
     name: "NOVA Mountain Tee",
     description: "An oversized streetwear essential",
     price: 64.50,
     tag: "NOVA ORIGINAL",
     image: "https://nova-ship.github.io/NOVA-BRAND/photos/novafront.png.png",
-   backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/novaback.png.png"
+    backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/novaback.png.png"
   }
+
 ];
 
 const cart = new Map();
