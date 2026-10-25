@@ -1,4 +1,8 @@
 
+// NOVA SUPPLY demo storefront. No real payments or orders are processed.
+
+const SITE_PHOTO = "https://nova-ship.github.io/NOVA-BRAND/photos/";
+
 const products = [
   {
     id: "daily-bottle",
@@ -22,8 +26,8 @@ const products = [
     description: "A premium everyday streetwear essential",
     price: 64.50,
     tag: "NOVA ORIGINAL",
-    image: "https://nova-ship.github.io/NOVA-BRAND/photos/fronthoodie.png",
-    backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/backhoodie.png"
+    image: SITE_PHOTO + "fronthoodie.png",
+    backImage: SITE_PHOTO + "backhoodie.png"
   },
   {
     id: "nova-tee",
@@ -31,91 +35,122 @@ const products = [
     description: "An oversized streetwear essential",
     price: 64.50,
     tag: "NOVA ORIGINAL",
-    image: "https://nova-ship.github.io/NOVA-BRAND/photos/novafront.png.png",
-    backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/novaback.png.png"
+    image: SITE_PHOTO + "novafront.png.png",
+    backImage: SITE_PHOTO + "novaback.png.png"
   },
   {
-    id: "nova-earthwide-white",
-    name: "NOVA EARTHWIDE — White",
-    description: "Relaxed-fit streetwear pants",
+    id: "nova-pants",
+    name: "NOVA Pants",
+    description: "A relaxed streetwear essential",
     price: 64.50,
     tag: "NOVA ORIGINAL",
-    image: "https://nova-ship.github.io/NOVA-BRAND/photos/whitepantsfront.png",
-    backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/whitepantsback.png"
-  },
-  {
-    id: "nova-earthwide-black",
-    name: "NOVA EARTHWIDE — Black",
-    description: "Relaxed-fit streetwear pants",
-    price: 64.50,
-    tag: "NOVA ORIGINAL",
-    image: "https://nova-ship.github.io/NOVA-BRAND/photos/blackpantsfront.png",
-    backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/blackpantsback.png"
+    variants: [
+      {
+        id: "white",
+        name: "White",
+        image: SITE_PHOTO + "whitepantsfront.png",
+        backImage: SITE_PHOTO + "whitepantsback.png"
+      },
+      {
+        id: "black",
+        name: "Black",
+        image: SITE_PHOTO + "blackpantsfront.png",
+        backImage: SITE_PHOTO + "blackpantsback.png"
+      }
+    ]
   }
-];
-
-
 ];
 
 const cart = new Map();
 const $ = (selector) => document.querySelector(selector);
+let toastTimer;
+let previewProductId = null;
+let previewVariantId = "white";
+let previewView = "front";
 
 const money = (amount) => new Intl.NumberFormat("en-AU", {
   style: "currency",
   currency: "AUD"
 }).format(amount);
 
+function getVariant(product, variantId) {
+  return product.variants?.find(variant => variant.id === variantId)
+    || product.variants?.[0]
+    || null;
+}
+
+function getProductImage(product, view = "front", variantId = null) {
+  const variant = getVariant(product, variantId);
+  const front = variant ? variant.image : product.image;
+  const back = variant ? variant.backImage : product.backImage;
+  return view === "back" && back ? back : front;
+}
+
 function renderProducts() {
-  $("#product-grid").innerHTML = products.map(product => `
-    <article class="product-card">
-      <div class="product-visual">
-        <span class="product-tag">${product.tag}</span>
+  const grid = $("#product-grid");
+  if (!grid) return;
 
-        <img class="product-photo"
-          src="${product.image}"
-          alt="${product.name} - front"
-          loading="lazy"
-         data-product-image="${product.id}"
-data-preview-open="${product.id}">
+  grid.innerHTML = products.map(product => {
+    const hasVariants = Boolean(product.variants?.length);
+    const firstVariant = getVariant(product, product.variants?.[0]?.id);
+    const image = firstVariant ? firstVariant.image : product.image;
 
-        ${product.backImage ? `
-          <div class="photo-switch">
-            <button type="button" data-view="front"
-              data-product="${product.id}" aria-pressed="true">
-              Front
-            </button>
-            <button type="button" data-view="back"
-              data-product="${product.id}" aria-pressed="false">
-              Back
-            </button>
-          </div>
-        ` : ""}
+    return `
+      <article class="product-card">
+        <div class="product-visual">
+          <span class="product-tag">${product.tag}</span>
+          <img class="product-photo"
+            src="${image}"
+            alt="${product.name} - front"
+            loading="lazy"
+            data-product-image="${product.id}"
+            data-preview-open="${product.id}">
 
-        <button class="quick-add" data-add="${product.id}"
-          aria-label="Add ${product.name} to bag">+</button>
-      </div>
+          ${product.backImage || hasVariants ? `
+            <div class="photo-switch">
+              <button type="button" data-view="front"
+                data-product="${product.id}" aria-pressed="true">Front</button>
+              <button type="button" data-view="back"
+                data-product="${product.id}" aria-pressed="false">Back</button>
+            </div>
+          ` : ""}
 
-      <div class="product-info">
-        <div>
-          <h3>${product.name}</h3>
-          <p>${product.description}</p>
+          ${hasVariants ? `
+            <div class="colour-switch">
+              ${product.variants.map((variant, index) => `
+                <button type="button"
+                  data-variant="${variant.id}"
+                  data-product="${product.id}"
+                  aria-pressed="${index === 0 ? "true" : "false"}">
+                  ${variant.name}
+                </button>
+              `).join("")}
+            </div>
+          ` : ""}
+
+          <button class="quick-add" data-add="${product.id}"
+            aria-label="Add ${product.name} to bag">+</button>
         </div>
-        <span class="price">${money(product.price)}</span>
-      </div>
-    </article>
-  `).join("");
+        <div class="product-info">
+          <div>
+            <h3>${product.name}</h3>
+            <p>${product.description}</p>
+          </div>
+          <span class="price">${money(product.price)}</span>
+        </div>
+      </article>
+    `;
+  }).join("");
 }
 
 function addToCart(id) {
   const product = products.find(item => item.id === id);
   if (!product) return;
-
   const current = cart.get(id);
   cart.set(id, {
     product,
     quantity: (current?.quantity || 0) + 1
   });
-
   renderCart();
   showToast(`${product.name} added to your bag`);
 }
@@ -123,10 +158,8 @@ function addToCart(id) {
 function changeQuantity(id, delta) {
   const item = cart.get(id);
   if (!item) return;
-
   item.quantity += delta;
   if (item.quantity <= 0) cart.delete(id);
-
   renderCart();
 }
 
@@ -137,30 +170,29 @@ function renderCart() {
     (sum, item) => sum + item.product.price * item.quantity, 0
   );
 
-  $("#cart-count").textContent = count;
-  $("#drawer-count").textContent = `(${count})`;
-  $("#cart-subtotal").textContent = money(subtotal);
+  if ($("#cart-count")) $("#cart-count").textContent = count;
+  if ($("#drawer-count")) $("#drawer-count").textContent = `(${count})`;
+  if ($("#cart-subtotal")) $("#cart-subtotal").textContent = money(subtotal);
+
+  const cartItems = $("#cart-items");
+  if (!cartItems) return;
 
   if (!entries.length) {
-    $("#cart-items").innerHTML =
+    cartItems.innerHTML =
       '<p class="empty-cart">Your bag is waiting for something good.</p>';
     return;
   }
 
-  $("#cart-items").innerHTML = entries.map(({ product, quantity }) => `
+  cartItems.innerHTML = entries.map(({ product, quantity }) => `
     <div class="cart-row">
       <div>
         <strong>${product.name}</strong>
         <p>${money(product.price)} each</p>
         <div class="quantity-controls">
-          <button data-quantity="${product.id}" data-delta="-1"
-            aria-label="Remove one ${product.name}">−</button>
+          <button data-quantity="${product.id}" data-delta="-1">−</button>
           <span>${quantity}</span>
-          <button data-quantity="${product.id}" data-delta="1"
-            aria-label="Add one ${product.name}">+</button>
-          <button class="remove-item" data-remove="${product.id}">
-            Remove
-          </button>
+          <button data-quantity="${product.id}" data-delta="1">+</button>
+          <button class="remove-item" data-remove="${product.id}">Remove</button>
         </div>
       </div>
       <strong>${money(product.price * quantity)}</strong>
@@ -169,23 +201,22 @@ function renderCart() {
 }
 
 function openCart() {
-  $("#cart-drawer").classList.add("open");
-  $("#cart-drawer").setAttribute("aria-hidden", "false");
-  $("#cart-backdrop").hidden = false;
+  $("#cart-drawer")?.classList.add("open");
+  $("#cart-drawer")?.setAttribute("aria-hidden", "false");
+  if ($("#cart-backdrop")) $("#cart-backdrop").hidden = false;
   document.body.style.overflow = "hidden";
 }
 
 function closeCart() {
-  $("#cart-drawer").classList.remove("open");
-  $("#cart-drawer").setAttribute("aria-hidden", "true");
-  $("#cart-backdrop").hidden = true;
-  document.body.style.overflow = "";
+  $("#cart-drawer")?.classList.remove("open");
+  $("#cart-drawer")?.setAttribute("aria-hidden", "true");
+  if ($("#cart-backdrop")) $("#cart-backdrop").hidden = true;
+  if (!preview.classList.contains("open")) document.body.style.overflow = "";
 }
-
-let toastTimer;
 
 function showToast(message) {
   const toast = $("#toast");
+  if (!toast) return;
   toast.textContent = message;
   toast.classList.add("show");
   clearTimeout(toastTimer);
@@ -196,7 +227,6 @@ const preview = document.createElement("div");
 preview.id = "product-preview";
 preview.className = "product-preview";
 preview.setAttribute("aria-hidden", "true");
-
 preview.innerHTML = `
   <div class="preview-backdrop" data-preview-close></div>
   <div class="preview-panel" role="dialog" aria-modal="true">
@@ -205,22 +235,41 @@ preview.innerHTML = `
     <h2 class="preview-title"></h2>
     <p class="preview-description"></p>
     <p class="preview-price"></p>
-    <button data-preview-view="front">Front</button>
-    <button data-preview-view="back">Back</button>
+    <div class="preview-colours"></div>
+    <button type="button" data-preview-view="front">Front</button>
+    <button type="button" data-preview-view="back">Back</button>
     <button class="preview-add" data-preview-add>ADD TO BAG</button>
   </div>
 `;
-
 document.body.appendChild(preview);
 
+function updatePreviewImage(product) {
+  const variant = getVariant(product, previewVariantId);
+  const front = variant ? variant.image : product.image;
+  const back = variant ? variant.backImage : product.backImage;
+  const image = preview.querySelector(".preview-image");
+  image.src = previewView === "back" && back ? back : front;
+  image.alt = `${product.name} - ${previewView}`;
+}
+
 function openProductPreview(product) {
-  if (!product.backImage) return;
+  if (!product.backImage && !product.variants?.length) return;
+  previewProductId = product.id;
+  previewVariantId = product.variants?.[0]?.id || "";
+  previewView = "front";
+
   preview.querySelector(".preview-title").textContent = product.name;
   preview.querySelector(".preview-description").textContent = product.description;
   preview.querySelector(".preview-price").textContent = money(product.price);
-  preview.querySelector(".preview-image").src = product.image;
-  preview.querySelector(".preview-image").alt = product.name;
   preview.querySelector("[data-preview-add]").dataset.previewAdd = product.id;
+
+  preview.querySelector(".preview-colours").innerHTML =
+    (product.variants || []).map((variant, index) => `
+      <button type="button" data-preview-variant="${variant.id}"
+        aria-pressed="${index === 0 ? "true" : "false"}">${variant.name}</button>
+    `).join("");
+
+  updatePreviewImage(product);
   preview.classList.add("open");
   preview.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
@@ -229,73 +278,79 @@ function openProductPreview(product) {
 function closeProductPreview() {
   preview.classList.remove("open");
   preview.setAttribute("aria-hidden", "true");
-  if (!$("#cart-drawer").classList.contains("open")) {
+  if (!$("#cart-drawer")?.classList.contains("open")) {
     document.body.style.overflow = "";
   }
 }
-document.addEventListener("click", event => {
-    const previewOpen = event.target.closest("[data-preview-open]");
 
+document.addEventListener("click", event => {
+  const previewOpen = event.target.closest("[data-preview-open]");
   if (previewOpen) {
-    const product = products.find(
-      item => item.id === previewOpen.dataset.previewOpen
-    );
+    const product = products.find(item => item.id === previewOpen.dataset.previewOpen);
     if (product) openProductPreview(product);
   }
 
-  if (event.target.closest("[data-preview-close]")) {
-    closeProductPreview();
-  }
+  if (event.target.closest("[data-preview-close]")) closeProductPreview();
 
-  const previewView = event.target.closest("[data-preview-view]");
-
-  if (previewView) {
-    const productName =
-      preview.querySelector(".preview-title").textContent;
-
-    const product = products.find(item => item.name === productName);
-
+  const previewViewButton = event.target.closest("[data-preview-view]");
+  if (previewViewButton && previewProductId) {
+    const product = products.find(item => item.id === previewProductId);
     if (product) {
-      const showBack = previewView.dataset.previewView === "back";
-      const image = preview.querySelector(".preview-image");
-
-      image.src = showBack ? product.backImage : product.image;
-      image.alt = product.name + (showBack ? " - back" : " - front");
+      previewView = previewViewButton.dataset.previewView;
+      updatePreviewImage(product);
     }
   }
-    const previewAdd = event.target.closest("[data-preview-add]");
 
+  const previewVariantButton = event.target.closest("[data-preview-variant]");
+  if (previewVariantButton && previewProductId) {
+    previewVariantId = previewVariantButton.dataset.previewVariant;
+    const product = products.find(item => item.id === previewProductId);
+    if (product) updatePreviewImage(product);
+    preview.querySelectorAll("[data-preview-variant]").forEach(button => {
+      button.setAttribute("aria-pressed", String(button === previewVariantButton));
+    });
+  }
+
+  const previewAdd = event.target.closest("[data-preview-add]");
   if (previewAdd) {
     addToCart(previewAdd.dataset.previewAdd);
     closeProductPreview();
   }
+
   const viewButton = event.target.closest("[data-view]");
-
   if (viewButton) {
-    const product = products.find(
-      item => item.id === viewButton.dataset.product
-    );
-
+    const product = products.find(item => item.id === viewButton.dataset.product);
     if (product) {
-      const showBack = viewButton.dataset.view === "back";
-      
-      const image = document.querySelector(
-        `[data-product-image="${product.id}"]`
+      const selectedVariant = document.querySelector(
+        `[data-product="${product.id}"][data-variant][aria-pressed="true"]`
       );
-
-
+      const variantId = selectedVariant?.dataset.variant || product.variants?.[0]?.id;
+      const showBack = viewButton.dataset.view === "back";
+      const image = document.querySelector(`[data-product-image="${product.id}"]`);
       if (image) {
-        image.src = showBack ? product.backImage : product.image;
+        image.src = getProductImage(product, showBack ? "back" : "front", variantId);
         image.alt = `${product.name} - ${showBack ? "back" : "front"}`;
       }
+      document.querySelectorAll(`[data-product="${product.id}"][data-view]`).forEach(button => {
+        button.setAttribute("aria-pressed", String(button === viewButton));
+      });
+    }
+  }
 
-      document.querySelectorAll(
-        `[data-product="${product.id}"][data-view]`
-      ).forEach(button => {
-        button.setAttribute(
-          "aria-pressed",
-          String(button === viewButton)
-        );
+  const variantButton = event.target.closest("[data-variant]");
+  if (variantButton) {
+    const product = products.find(item => item.id === variantButton.dataset.product);
+    if (product) {
+      const selectedView = document.querySelector(
+        `[data-product="${product.id}"][data-view][aria-pressed="true"]`
+      )?.dataset.view || "front";
+      const image = document.querySelector(`[data-product-image="${product.id}"]`);
+      if (image) {
+        image.src = getProductImage(product, selectedView, variantButton.dataset.variant);
+        image.alt = `${product.name} - ${variantButton.textContent.trim()} - ${selectedView}`;
+      }
+      document.querySelectorAll(`[data-product="${product.id}"][data-variant]`).forEach(button => {
+        button.setAttribute("aria-pressed", String(button === variantButton));
       });
     }
   }
@@ -304,9 +359,7 @@ document.addEventListener("click", event => {
   if (add) addToCart(add.dataset.add);
 
   const quantity = event.target.closest("[data-quantity]");
-  if (quantity) {
-    changeQuantity(quantity.dataset.quantity, Number(quantity.dataset.delta));
-  }
+  if (quantity) changeQuantity(quantity.dataset.quantity, Number(quantity.dataset.delta));
 
   const remove = event.target.closest("[data-remove]");
   if (remove) {
@@ -316,8 +369,7 @@ document.addEventListener("click", event => {
 
   if (event.target.closest("#cart-toggle")) openCart();
 
-  if (event.target.closest("#cart-close") ||
-      event.target.closest("#cart-backdrop")) {
+  if (event.target.closest("#cart-close") || event.target.closest("#cart-backdrop")) {
     closeCart();
   }
 
@@ -327,10 +379,13 @@ document.addEventListener("click", event => {
 });
 
 document.addEventListener("keydown", event => {
-  if (event.key === "Escape") closeCart();
+  if (event.key === "Escape") {
+    closeCart();
+    closeProductPreview();
+  }
 });
 
-$("#year").textContent = new Date().getFullYear();
+if ($("#year")) $("#year").textContent = new Date().getFullYear();
 
 renderProducts();
 renderCart();
