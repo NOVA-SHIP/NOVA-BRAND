@@ -24,7 +24,7 @@ const products = [
     id: "nova-hoodie",
     name: "NOVA Unisex Hoodie",
     description: "A premium everyday streetwear essential",
-    price: 64.50,
+    price: 84.95,
     tag: "NOVA ORIGINAL",
     image: SITE_PHOTO + "fronthoodie.png",
     backImage: SITE_PHOTO + "backhoodie.png"
@@ -33,7 +33,7 @@ const products = [
     id: "nova-tee",
     name: "NOVA Mountain Tee",
     description: "An oversized streetwear essential",
-    price: 64.50,
+    price: 89.95,
     tag: "NOVA ORIGINAL",
     image: SITE_PHOTO + "novafront.png.png",
     backImage: SITE_PHOTO + "novaback.png.png"
@@ -42,7 +42,7 @@ const products = [
     id: "nova-pants",
     name: "NOVA Pants",
     description: "A relaxed streetwear essential",
-    price: 64.50,
+    price: 99.95,
     tag: "NOVA ORIGINAL",
     variants: [
       {
