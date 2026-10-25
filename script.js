@@ -172,7 +172,83 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
 }
 
+const preview = document.createElement("div");
+preview.id = "product-preview";
+preview.className = "product-preview";
+preview.setAttribute("aria-hidden", "true");
+
+preview.innerHTML = `
+  <div class="preview-backdrop" data-preview-close></div>
+  <div class="preview-panel" role="dialog" aria-modal="true">
+    <button class="preview-close" data-preview-close>×</button>
+    <img class="preview-image" src="" alt="">
+    <h2 class="preview-title"></h2>
+    <p class="preview-description"></p>
+    <p class="preview-price"></p>
+    <button data-preview-view="front">Front</button>
+    <button data-preview-view="back">Back</button>
+    <button class="preview-add" data-preview-add>ADD TO BAG</button>
+  </div>
+`;
+
+document.body.appendChild(preview);
+
+function openProductPreview(product) {
+  if (!product.backImage) return;
+  preview.querySelector(".preview-title").textContent = product.name;
+  preview.querySelector(".preview-description").textContent = product.description;
+  preview.querySelector(".preview-price").textContent = money(product.price);
+  preview.querySelector(".preview-image").src = product.image;
+  preview.querySelector(".preview-image").alt = product.name;
+  preview.querySelector("[data-preview-add]").dataset.previewAdd = product.id;
+  preview.classList.add("open");
+  preview.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeProductPreview() {
+  preview.classList.remove("open");
+  preview.setAttribute("aria-hidden", "true");
+  if (!$("#cart-drawer").classList.contains("open")) {
+    document.body.style.overflow = "";
+  }
+}
 document.addEventListener("click", event => {
+    const previewOpen = event.target.closest("[data-preview-open]");
+
+  if (previewOpen) {
+    const product = products.find(
+      item => item.id === previewOpen.dataset.previewOpen
+    );
+    if (product) openProductPreview(product);
+  }
+
+  if (event.target.closest("[data-preview-close]")) {
+    closeProductPreview();
+  }
+
+  const previewView = event.target.closest("[data-preview-view]");
+
+  if (previewView) {
+    const productName =
+      preview.querySelector(".preview-title").textContent;
+
+    const product = products.find(item => item.name === productName);
+
+    if (product) {
+      const showBack = previewView.dataset.previewView === "back";
+      const image = preview.querySelector(".preview-image");
+
+      image.src = showBack ? product.backImage : product.image;
+      image.alt = product.name + (showBack ? " - back" : " - front");
+    }
+  }
+    const previewAdd = event.target.closest("[data-preview-add]");
+
+  if (previewAdd) {
+    addToCart(previewAdd.dataset.previewAdd);
+    closeProductPreview();
+  }
   const viewButton = event.target.closest("[data-view]");
 
   if (viewButton) {
@@ -183,7 +259,8 @@ document.addEventListener("click", event => {
     if (product) {
       const showBack = viewButton.dataset.view === "back";
       const image = document.querySelector(
-        `[data-product-image="${product.id}"]`
+        data-product-image="${product.id}"
+data-preview-open="${product.id}">
       );
 
       if (image) {
