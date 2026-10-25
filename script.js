@@ -25,12 +25,15 @@ const products = [
     image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop"
   },
   {
-    id: "nova-tee",
-    name: "NOVA Mountain Tee",
-    description: "An oversized streetwear essential",
-    price: 64.50,
-    tag: "NOVA ORIGINAL",
-image: "https://nova-ship.github.io/NOVA-BRAND/photos/novafront.png.png"
+   {
+  id: "nova-tee",
+  name: "NOVA Mountain Tee",
+  description: "An oversized streetwear essential",
+  price: 64.50,
+  tag: "NOVA ORIGINAL",
+  image: "https://nova-ship.github.io/NOVA-BRAND/photos/novafront.png.png",
+  backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/novaback.png"
+}
   }
 ];
 
