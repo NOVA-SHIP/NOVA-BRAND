@@ -258,10 +258,11 @@ document.addEventListener("click", event => {
 
     if (product) {
       const showBack = viewButton.dataset.view === "back";
+      
       const image = document.querySelector(
-        data-product-image="${product.id}"
-data-preview-open="${product.id}">
+        `[data-product-image="${product.id}"]`
       );
+
 
       if (image) {
         image.src = showBack ? product.backImage : product.image;
