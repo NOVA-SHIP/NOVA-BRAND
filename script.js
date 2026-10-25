@@ -25,36 +25,36 @@ const products = [
     image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop"
   },
   {
-   {
-  id: "nova-tee",
-  name: "NOVA Mountain Tee",
-  description: "An oversized streetwear essential",
-  price: 64.50,
-  tag: "NOVA ORIGINAL",
-  image: "https://nova-ship.github.io/NOVA-BRAND/photos/novafront.png.png",
-  backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/novaback.png"
-}
+    id: "nova-tee",
+    name: "NOVA Mountain Tee",
+    description: "An oversized streetwear essential",
+    price: 64.50,
+    tag: "NOVA ORIGINAL",
+    image: "https://nova-ship.github.io/NOVA-BRAND/photos/novafront.png.png",
+    backImage: "https://nova-ship.github.io/NOVA-BRAND/photos/novaback.png"
   }
 ];
 
 const cart = new Map();
 const $ = (selector) => document.querySelector(selector);
+
 const money = (amount) => new Intl.NumberFormat("en-AU", {
   style: "currency",
   currency: "AUD"
 }).format(amount);
-
 
 function renderProducts() {
   $("#product-grid").innerHTML = products.map(product => `
     <article class="product-card">
       <div class="product-visual">
         <span class="product-tag">${product.tag}</span>
+
         <img class="product-photo"
           src="${product.image}"
           alt="${product.name} - front"
           loading="lazy"
           data-product-image="${product.id}">
+
         ${product.backImage ? `
           <div class="photo-switch">
             <button type="button" data-view="front"
@@ -67,29 +67,11 @@ function renderProducts() {
             </button>
           </div>
         ` : ""}
+
         <button class="quick-add" data-add="${product.id}"
           aria-label="Add ${product.name} to bag">+</button>
       </div>
-      <div class="product-info">
-        <div>
-          <h3>${product.name}</h3>
-          <p>${product.description}</p>
-        </div>
-        <span class="price">${money(product.price)}</span>
-      </div>
-    </article>
-  `).join("");
-}
- {
-  $("#product-grid").innerHTML = products.map(product => `
-    <article class="product-card">
-      <div class="product-visual">
-        <span class="product-tag">${product.tag}</span>
-        <img class="product-photo" src="${product.image}"
-          alt="${product.name}" loading="lazy">
-        <button class="quick-add" data-add="${product.id}"
-          aria-label="Add ${product.name} to bag">+</button>
-      </div>
+
       <div class="product-info">
         <div>
           <h3>${product.name}</h3>
@@ -104,11 +86,13 @@ function renderProducts() {
 function addToCart(id) {
   const product = products.find(item => item.id === id);
   if (!product) return;
+
   const current = cart.get(id);
   cart.set(id, {
     product,
     quantity: (current?.quantity || 0) + 1
   });
+
   renderCart();
   showToast(`${product.name} added to your bag`);
 }
@@ -116,8 +100,10 @@ function addToCart(id) {
 function changeQuantity(id, delta) {
   const item = cart.get(id);
   if (!item) return;
+
   item.quantity += delta;
   if (item.quantity <= 0) cart.delete(id);
+
   renderCart();
 }
 
@@ -184,7 +170,8 @@ function showToast(message) {
 }
 
 document.addEventListener("click", event => {
-    const viewButton = event.target.closest("[data-view]");
+  const viewButton = event.target.closest("[data-view]");
+
   if (viewButton) {
     const product = products.find(
       item => item.id === viewButton.dataset.product
@@ -196,8 +183,10 @@ document.addEventListener("click", event => {
         `[data-product-image="${product.id}"]`
       );
 
-      image.src = showBack ? product.backImage : product.image;
-      image.alt = `${product.name} - ${showBack ? "back" : "front"}`;
+      if (image) {
+        image.src = showBack ? product.backImage : product.image;
+        image.alt = `${product.name} - ${showBack ? "back" : "front"}`;
+      }
 
       document.querySelectorAll(
         `[data-product="${product.id}"][data-view]`
@@ -209,6 +198,7 @@ document.addEventListener("click", event => {
       });
     }
   }
+
   const add = event.target.closest("[data-add]");
   if (add) addToCart(add.dataset.add);
 
@@ -224,8 +214,11 @@ document.addEventListener("click", event => {
   }
 
   if (event.target.closest("#cart-toggle")) openCart();
+
   if (event.target.closest("#cart-close") ||
-      event.target.closest("#cart-backdrop")) closeCart();
+      event.target.closest("#cart-backdrop")) {
+    closeCart();
+  }
 
   if (event.target.closest("#checkout-button")) {
     showToast("Demo only — secure checkout is not connected yet.");
@@ -237,5 +230,6 @@ document.addEventListener("keydown", event => {
 });
 
 $("#year").textContent = new Date().getFullYear();
+
 renderProducts();
 renderCart();
