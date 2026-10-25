@@ -140,3 +140,28 @@ footer p, footer small { color: var(--muted); font-size: 10px; }
   nav a { font-size:9px; }
   .product-visual { height:160px; }
 }
+
+.photo-switch {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  gap: 6px;
+}
+
+.photo-switch button {
+  padding: 8px 14px;
+  border: 1px solid #222;
+  border-radius: 20px;
+  background: #fff;
+  color: #222;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.photo-switch button[aria-pressed="true"] {
+  background: #222;
+  color: #fff;
+}
