@@ -42,7 +42,7 @@ const products = [
     id: "nova-pants",
     name: "NOVA Pants",
     description: "A relaxed streetwear essential",
-    price: 99.95,
+    price: 79.95,
     tag: "NOVA ORIGINAL",
     variants: [
       {
