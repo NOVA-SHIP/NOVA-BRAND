@@ -1,5 +1,5 @@
 
-
+const SITE_PHOTO = "https://nova-ship.github.io/NOVA-BRAND/photos/";
 const products = [
   {
     id: "nova-cap",
