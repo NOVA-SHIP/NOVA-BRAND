@@ -7,14 +7,10 @@ const products = [
 {
   id: "nova-cap",
   name: "NOVA Signature Cap",
-  description: "A considered essential for everyday wear.",
+  description: "A considered essential for everyday wear",
   price: 39.95,
   tag: "THE EVERYDAY",
-  images: [
-    "photos/Capfront.png",
-    "photos/Capback.png",
-    "photos/Capside.png"
-  ]
+  image: "photos/Capfront.png"
 },
     id: "soft-glow",
     name: "Soft Glow Lamp",
