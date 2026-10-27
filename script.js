@@ -4,15 +4,18 @@
 const SITE_PHOTO = "https://nova-ship.github.io/NOVA-BRAND/photos/";
 
 const products = [
-  {
-    id: "daily-bottle",
-    name: "Daily Form Bottle",
-    description: "A considered everyday carry",
-    price: 29.00,
-    tag: "THE EVERYDAY",
-    image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&auto=format&fit=crop"
-  },
-  {
+{
+  id: "nova-cap",
+  name: "NOVA Signature Cap",
+  description: "A considered essential for everyday wear.",
+  price: 39.95,
+  tag: "THE EVERYDAY",
+  images: [
+    "photos/Capfront.png",
+    "photos/Capback.png",
+    "photos/Capside.png"
+  ]
+},
     id: "soft-glow",
     name: "Soft Glow Lamp",
     description: "Warm light, simple form",
