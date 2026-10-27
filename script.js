@@ -1,17 +1,15 @@
 
-// NOVA SUPPLY demo storefront. No real payments or orders are processed.
-
-const SITE_PHOTO = "https://nova-ship.github.io/NOVA-BRAND/photos/";
 
 const products = [
-{
-  id: "nova-cap",
-  name: "NOVA Signature Cap",
-  description: "A considered essential for everyday wear",
-  price: 39.95,
-  tag: "THE EVERYDAY",
-  image: "photos/Capfront.png"
-},
+  {
+    id: "nova-cap",
+    name: "NOVA Signature Cap",
+    description: "A considered essential for everyday wear",
+    price: 39.95,
+    tag: "THE EVERYDAY",
+    image: SITE_PHOTO + "Capfront.png"
+  },
+  {
     id: "soft-glow",
     name: "Soft Glow Lamp",
     description: "Warm light, simple form",
@@ -59,6 +57,7 @@ const products = [
     ]
   }
 ];
+
 
 const cart = new Map();
 const $ = (selector) => document.querySelector(selector);
