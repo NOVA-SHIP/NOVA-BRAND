@@ -79,9 +79,15 @@ function getVariant(product, variantId) {
 
 function getProductImage(product, view = "front", variantId = null) {
   const variant = getVariant(product, variantId);
+
   const front = variant ? variant.image : product.image;
   const back = variant ? variant.backImage : product.backImage;
-  return view === "back" && back ? back : front;
+  const side = variant ? variant.sideImage : product.sideImage;
+
+  if (view === "back" && back) return back;
+  if (view === "side" && side) return side;
+
+  return front;
 }
 
 function renderProducts() {
